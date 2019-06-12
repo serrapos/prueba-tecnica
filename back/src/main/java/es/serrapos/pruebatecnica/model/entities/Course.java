@@ -2,6 +2,7 @@ package es.serrapos.pruebatecnica.model.entities;
 
 import java.io.Serializable;
 
+import es.serrapos.pruebatecnica.model.enums.CourseLevel;
 import lombok.Data;
 
 /**
@@ -27,7 +28,7 @@ public class Course implements Serializable {
     /**
      * Level of Course
      */
-    private String level;
+    private CourseLevel level;
 
     /**
      * Número de horas del curso
@@ -37,7 +38,7 @@ public class Course implements Serializable {
     /**
      * Teacher Id of Course
      */
-    private String teacher;
+    private Teacher teacher;
 
     /**
      * State of Course

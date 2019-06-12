@@ -3,7 +3,6 @@ package es.serrapos.pruebatecnica.rest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -17,8 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import es.serrapos.pruebatecnica.model.entities.Course;
+import es.serrapos.pruebatecnica.model.entities.Teacher;
 import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
-import es.serrapos.pruebatecnica.model.services.CourseService;
+import es.serrapos.pruebatecnica.model.services.TeacherService;
 
 /**
 * Rest service to management of Entity 'Course'
@@ -26,87 +26,71 @@ import es.serrapos.pruebatecnica.model.services.CourseService;
 * @version 1.0
 */
 @Component
-@Path("/v1/course")
+@Path("/v1/teacher")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CourseResource {
+public class TeacherResource {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
-    private CourseService courseService;
+    private TeacherService teacherService;
     
-    public CourseResource(CourseService courseService) {
-        this.courseService = courseService;
-    }
-    
-    @OPTIONS
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response optionsForCourseResource() {        
-        return Response.status(200)
-          .header("Allow","POST, PUT, GET, DELETE")
-          .header("Content-Type", MediaType.APPLICATION_JSON)
-          .header("Content-Length", "0")
-          .build();
+    public TeacherResource(TeacherService teacherService) {
+        this.teacherService = teacherService;
     }
     
     @GET
     public Response getAll() {
-        return Response.ok().entity(courseService.findAll()).build();
-    }
-    
-    @GET
-    @Path("/active")
-    public Response getAllActive() {
-        return Response.ok().entity(courseService.findAllActive()).build();
+        return Response.ok().entity(teacherService.findAll()).build();
     }
  
     @GET
 	@Path("/{id}")
 	public Response get(@PathParam("id") Long id) {
-		Course course = null;
+		Teacher teacher = null;
 		try {
-			course = courseService.findOne(id);
+			teacher = teacherService.findOne(id);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
 			return Response.status(404).build();
 		}
-		return Response.ok().entity(course).build();
+		return Response.ok().entity(teacher).build();
     }
     
     @POST
-	public Response create(Course course) {
-		if(course.getTitle() == null || course.getLevel() == null || course.getTeacher() == null || course.getState() == null) {
+	public Response create(Teacher teacher) {
+		if(teacher.getFirstName() == null || teacher.getLastName() == null) {
 			return Response.status(500).entity("Validation error: Failure to fill in required fields").build();
 		}
-		return Response.ok().entity(courseService.create(course)).build();
+		return Response.ok().entity(teacherService.create(teacher)).build();
     }
     
     @PUT
     @Path("/{id}")
-    public Response update(@PathParam("id") Long id, Course course) {
-    	Course courseUpdated = null;
+    public Response update(@PathParam("id") Long id, Teacher teacher) {
+    	Teacher teacherUpdated = null;
     	try {
-    		if(course.getTitle() == null || course.getLevel() == null || course.getTeacher() == null || course.getState() == null) {
+    		if(teacher.getFirstName() == null || teacher.getLastName() == null) {
     			return Response.status(500).entity("Validation error: Failure to fill in required fields").build();
     		}
-    		courseUpdated = courseService.update(id, course);
+    		teacherUpdated = teacherService.update(id, teacher);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
 			return Response.status(404).build();
 		}
-		return Response.ok().entity(courseUpdated).build();
+		return Response.ok().entity(teacherUpdated).build();
     }
     
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
     	try {
-			courseService.delete(id);
+    		teacherService.delete(id);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
 			return Response.status(404).build();
 		}
-        return Response.ok().entity("Course deleted").build();
+        return Response.ok().entity("Teacher deleted").build();
     }
     
 }   

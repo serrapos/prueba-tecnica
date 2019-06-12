@@ -28,7 +28,7 @@ public class MyBatisCourseService implements CourseService{
     public Course update(Long id, Course course) throws EntityNotFoundException {
         Course courseBD = this.courseMapper.getById(id);
         if (courseBD == null) {
-            throw new EntityNotFoundException("No existe el registro a modificar");
+            throw new EntityNotFoundException("Id to update not found");
         }
         courseBD.setTitle(course.getTitle());
         courseBD.setLevel(course.getLevel());
@@ -43,7 +43,7 @@ public class MyBatisCourseService implements CourseService{
     @Override
     public void delete(Long id) throws EntityNotFoundException {
         if (this.courseMapper.getById(id) == null) {
-            throw new EntityNotFoundException("No existe el registro a eliminar");
+            throw new EntityNotFoundException("Id to delete not found");
         }
         this.courseMapper.deleteById(id);
     }
@@ -57,9 +57,14 @@ public class MyBatisCourseService implements CourseService{
     public Course findOne(Long id) throws EntityNotFoundException {
         Course course = this.courseMapper.getById(id);
         if (course == null) {
-            throw new EntityNotFoundException("No existe el registro en el sistema");
+            throw new EntityNotFoundException("Id to get not found");
         }
         return course;
+    }
+    
+    @Override
+    public List<Course> findAllActive(){
+    	return this.courseMapper.getAllActive();
     }
 
 }

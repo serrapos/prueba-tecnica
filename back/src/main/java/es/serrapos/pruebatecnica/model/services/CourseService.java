@@ -12,6 +12,7 @@ public interface CourseService {
     public Course update(Long id, Course course) throws EntityNotFoundException;
     public void delete(Long id) throws EntityNotFoundException;
     public List<Course> findAll();
+    public List<Course> findAllActive();
     public Course findOne(Long id) throws EntityNotFoundException;
 
 }
