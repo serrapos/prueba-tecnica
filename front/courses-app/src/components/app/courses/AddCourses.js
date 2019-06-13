@@ -20,7 +20,6 @@ export class AddCourses extends React.Component {
 
     handleSubmit(event) {
 
-        console.log(this.state);
         const newCourse = {
             title: this.state.title,
             level: this.state.level,
@@ -29,34 +28,42 @@ export class AddCourses extends React.Component {
             state: this.state.active,
         };
 
-        this.setState({ messageOk: false, messageError: false });
+        if(newCourse.title && newCourse.level  && newCourse.numberOfHours  && newCourse.teacher && newCourse.teacher.id && newCourse.state) {
+            this.setState({ messageOk: false, messageError: false });
 
-        axios.post(`http://localhost:8080/api/v1/course`, newCourse)
-          .then(res => {
-            const courseCreate = res.data;
-            this.setState({ 
-                messageOk: true, 
-                courseCreate: courseCreate,
-                active: true,
-                level: "BASICO",
-                teacher: '',
-                title: '',
-                numberOfHours: ''
-             });
+            axios.post(`http://localhost:8080/api/v1/course`, newCourse)
+              .then(res => {
+                const courseCreate = res.data;
+                this.setState({ 
+                    messageOk: true, 
+                    courseCreate: courseCreate,
+                    active: true,
+                    level: "BASICO",
+                    teacher: '',
+                    title: '',
+                    numberOfHours: ''
+                 });
+    
+              }).catch(error => {
+                if(error.response.status === 409){
+                    this.setState({ messageError: true, message: "El título indicado ya existe" });
+                } else{
+                    this.setState({ messageError: true, message: "Código de error {error.response.status}" });
+                }
+                  
+              });
+        } else {
+            this.setState({ messageError: true, message: "Todos los campos son obligatorios" });
+        }
 
-          }, error => {
-            this.setState({ messageError: true });
-          })
+        
         event.preventDefault();
     }
 
     handleInputChange(event) {
-        console.log(event);
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-        console.log("value=",value);
-        console.log("name=",name);
         this.setState({
           [name]: value
         });
@@ -75,9 +82,9 @@ export class AddCourses extends React.Component {
         const messageError = this.state.messageError;
         let alert;
         if (messageError) {
-            alert = <div className="alert alert-danger">Se ha producido un error, revise todos los campos</div>;
+            alert = <div className="alert alert-danger mt-3">Se ha producido un error: {this.state.message}</div>;
         } else if(messageOk) {
-            alert = <div className="alert alert-info">Curso creado correctamente. <NavLink className="nav-link" to="/" exact>Volver al listado</NavLink></div>;
+            alert = <div className="alert alert-info mt-3">Curso creado correctamente. <NavLink to="/" exact>Volver al listado</NavLink></div>;
         }
 
        return (
@@ -94,20 +101,20 @@ export class AddCourses extends React.Component {
                 <div className="form-group">
                     <label htmlFor="teacher">Profesor</label>
                     <select id="teacher" className="form-control" value={this.state.teacher}
-                         name="teacher" onChange={this.handleInputChange}>
+                         name="teacher" onChange={this.handleInputChange} required>
                         <option>Selecciona un profesor...</option>
                         { this.state.teachers.map(teacher => <option value={teacher.id} key={teacher.id}>{teacher.firstName} {teacher.lastName}</option>)}  
                     </select>
                 </div>
                 <div className="form-group">
                     <label htmlFor="title">Título</label>
-                    <input type="text" className="form-control" id="title" name="title" 
+                    <input type="text" className="form-control" id="title" name="title" required
                         placeholder="Titulo del curso" onChange={this.handleInputChange}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="level">Nivel</label>
                     <select id="level" className="form-control" value={this.state.level}
-                        name="level" onChange={this.handleInputChange}>
+                        name="level" onChange={this.handleInputChange} required>
                         <option value="BASICO">Básico</option>
                         <option value="INTERMEDIO">Intermedio</option>
                         <option value="AVANZADO">Avanzado</option>
@@ -116,9 +123,10 @@ export class AddCourses extends React.Component {
                 <div className="form-group">
                     <label htmlFor="numberOfHours">Horas</label>
                     <input type="number" className="form-control" id="numberOfHours" 
-                        name="numberOfHours" onChange={this.handleInputChange}/>
+                        name="numberOfHours" min={0} onChange={this.handleInputChange} required/>
                 </div>
                 <button type="submit" className="btn btn-primary">Añadir</button>
+                <NavLink to="/" className="ml-3 btn btn-secondary">Cancelar</NavLink>
                 {alert}
             </form>
         </div>

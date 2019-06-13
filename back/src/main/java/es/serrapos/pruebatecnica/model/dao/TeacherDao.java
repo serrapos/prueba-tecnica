@@ -1,11 +1,11 @@
-package es.serrapos.pruebatecnica.model.services;
+package es.serrapos.pruebatecnica.model.dao;
 
 import java.util.List;
 
+import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
 import es.serrapos.pruebatecnica.model.entities.Teacher;
-import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
 
-public interface TeacherService {
+public interface TeacherDao {
 	
 	public Teacher create(Teacher teacher);
     public Teacher update(Long id, Teacher teacher) throws EntityNotFoundException;

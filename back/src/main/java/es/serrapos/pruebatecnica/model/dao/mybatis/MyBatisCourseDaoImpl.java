@@ -1,20 +1,20 @@
-package es.serrapos.pruebatecnica.model.services.mybatis;
+package es.serrapos.pruebatecnica.model.dao.mybatis;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
+import es.serrapos.pruebatecnica.model.dao.CourseDao;
 import es.serrapos.pruebatecnica.model.entities.Course;
-import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
 import es.serrapos.pruebatecnica.model.mappers.CourseMapper;
-import es.serrapos.pruebatecnica.model.services.CourseService;
 
 @Service
-public class MyBatisCourseService implements CourseService{
+public class MyBatisCourseDaoImpl implements CourseDao{
 	
 	private CourseMapper courseMapper;
 	 
-    public MyBatisCourseService(final CourseMapper courseMapper) {
+    public MyBatisCourseDaoImpl(final CourseMapper courseMapper) {
         this.courseMapper = courseMapper;
     }
  
@@ -60,6 +60,25 @@ public class MyBatisCourseService implements CourseService{
             throw new EntityNotFoundException("Id to get not found");
         }
         return course;
+    }
+    
+    @Override
+    public Course findOneByTitle(String title) throws EntityNotFoundException {
+        Course course = this.courseMapper.getByTitle(title);
+        if (course == null) {
+            throw new EntityNotFoundException("Title not found");
+        }
+        return course;
+    }
+    
+    @Override
+    public boolean existsByTitle(String title) {
+        return this.courseMapper.checkCourseExistsByTitle(title);
+    }
+    
+    @Override
+    public boolean existsByTitleAndDistintId(String title, Long id) {
+        return this.courseMapper.checkCourseExistsByTitleAndDistintId(title, id);
     }
     
     @Override

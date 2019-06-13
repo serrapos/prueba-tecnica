@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
     "primeicons": "^1.0.0",
     "primereact": "^3.1.4",
     "react": "^16.8.6",

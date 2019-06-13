@@ -24,17 +24,21 @@ import es.serrapos.pruebatecnica.model.entities.Course;
 @Mapper
 public interface CourseMapper {
  
-    @Insert("INSERT INTO COURSES(TITLE, LEVEL, HOURS, TEACHER_ID, STATE) VALUES("
+    @Insert("INSERT INTO COURSES(TITLE, LEVEL, HOURS, TEACHER_ID, STATE, FILE_ID) VALUES("
     		+ "#{title}, "
     		+ "#{level}, "
     		+ "#{numberOfHours}, "
     		+ "SELECT ID FROM TEACHERS WHERE ID = #{teacher.id},"
-    		+ "#{state}) ")
+    		+ "#{state},"
+    		+ "#{fileId}) ")
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="ID")
     public int insert(Course course);
  
     @Update("UPDATE COURSES SET TITLE = #{title}, LEVEL = #{level}, HOURS = #{numberOfHours}, TEACHER_ID = #{teacher.id}, STATE = #{state} WHERE ID=#{id}")
     public int update(Course course);
+    
+    @Update("UPDATE COURSES SET FILES_ID = #{idFile} WHERE ID=#{id}")
+    public int updateFile(Long id, Long idFile);
  
     @Delete("DELETE FROM COURSES WHERE ID=#{id}")
     public int deleteById(Long id);
@@ -47,6 +51,7 @@ public interface CourseMapper {
                 @Result(property = "numberOfHours", column = "HOURS"),
                 @Result(property = "state", column = "STATE"),
                 @Result(property="teacher", column="TEACHER_ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+                @Result(property="fileId", column="FILE_ID")
             })
     public List<Course> getAll();
     
@@ -58,6 +63,7 @@ public interface CourseMapper {
                 @Result(property = "numberOfHours", column = "HOURS"),
                 @Result(property = "state", column = "STATE"),
                 @Result(property="teacher", column="TEACHER_ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+                @Result(property="fileId", column="FILE_ID")
             })
     public List<Course> getAllActive();
  
@@ -69,7 +75,26 @@ public interface CourseMapper {
                 @Result(property = "numberOfHours", column = "HOURS"),
                 @Result(property = "state", column = "STATE"),
                 @Result(property="teacher", column="ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+                @Result(property="fileId", column="FILE_ID")
             })
     public Course getById(@Param("id") Long id);
+    
+    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID FROM COURSES c WHERE c.TITLE = #{title}")
+    @Results(value = {
+                @Result(property = "id", column = "ID"),
+                @Result(property = "title", column = "TITLE"),
+                @Result(property = "level", column = "LEVEL"),
+                @Result(property = "numberOfHours", column = "HOURS"),
+                @Result(property = "state", column = "STATE"),
+                @Result(property="teacher", column="ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+                @Result(property="fileId", column="FILE_ID")
+            })
+    public Course getByTitle(@Param("title") String title);
+    
+    @Select("SELECT EXISTS(SELECT 1 FROM COURSES c WHERE c.TITLE = #{title})")
+    boolean checkCourseExistsByTitle(@Param("title") String title);
+    
+    @Select("SELECT EXISTS(SELECT 1 FROM COURSES c WHERE c.TITLE = #{title} AND c.ID != #{id})")
+    boolean checkCourseExistsByTitleAndDistintId(@Param("title") String title, @Param("id") Long id);
  
 }             

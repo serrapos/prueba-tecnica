@@ -1,13 +1,19 @@
 import React from 'react';
 import axios from 'axios';
-
+import {DataTable} from 'primereact/datatable';
+import {Column} from 'primereact/column';
+import { NavLink } from "react-router-dom";
 
 export class ListCourses extends React.Component {
 
-    state = {
-        courses: []
+    constructor() {
+        super();
+        this.state = {
+            courses: []
+        };
+        this.teacherTemplate = this.teacherTemplate.bind(this);
     }
-
+    
     componentDidMount() {
         axios.get(`http://localhost:8080/api/v1/course/active`)
           .then(res => {
@@ -16,32 +22,21 @@ export class ListCourses extends React.Component {
           })
     }
 
+    teacherTemplate(rowData, column) {
+        return rowData.teacher.lastName + ", " + rowData.teacher.firstName;
+    }
+
     render() {
        return (
         <div>
             <h2>Listado de cursos</h2>
-            <table className="table">
-                <thead className="thead-light">
-                    <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Profesor</th>
-                    <th scope="col">Nivel</th>
-                    <th scope="col">Horas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { this.state.courses.map(course => 
-                        <tr key={course.id}>
-                        <th scope="row">{course.id}</th>
-                        <td>{course.title}</td>
-                        <td>{course.teacher.firstName} {course.teacher.lastName}</td>
-                        <td>{course.level}</td>
-                        <td>{course.numberOfHours}</td>
-                        </tr>
-                        )}                    
-                </tbody>
-            </table>
+            <div className="text-right p-3"><NavLink to="/new-course/" className="btn btn-primary btn-lg">Nuevo</NavLink></div>
+            <DataTable value={this.state.courses} paginator={true} paginatorLeft={true} paginatorRight={true} rows={5} rowsPerPageOptions={[5,10,20]}>
+                <Column field="title" header="Título" sortable={true}/>
+                <Column field="teacher" body={this.teacherTemplate}  header="Profesor" sortable={true} sortField="teacher.lastName"/>
+                <Column field="level" header="Nivel" sortable={true} />
+                <Column field="numberOfHours" header="Horas" sortable={true}/>
+            </DataTable>
         </div>
        );
     }

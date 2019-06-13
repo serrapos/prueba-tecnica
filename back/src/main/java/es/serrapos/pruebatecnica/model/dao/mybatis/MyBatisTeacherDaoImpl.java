@@ -1,20 +1,20 @@
-package es.serrapos.pruebatecnica.model.services.mybatis;
+package es.serrapos.pruebatecnica.model.dao.mybatis;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
+import es.serrapos.pruebatecnica.model.dao.TeacherDao;
 import es.serrapos.pruebatecnica.model.entities.Teacher;
-import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
 import es.serrapos.pruebatecnica.model.mappers.TeacherMapper;
-import es.serrapos.pruebatecnica.model.services.TeacherService;
 
 @Service
-public class MyBatisTeacherService implements TeacherService{
+public class MyBatisTeacherDaoImpl implements TeacherDao{
 	
 	private TeacherMapper teacherMapper;
 	 
-    public MyBatisTeacherService(final TeacherMapper teacherMapper) {
+    public MyBatisTeacherDaoImpl(final TeacherMapper teacherMapper) {
         this.teacherMapper = teacherMapper;
     }
  

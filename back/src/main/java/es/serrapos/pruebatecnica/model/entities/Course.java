@@ -44,5 +44,10 @@ public class Course implements Serializable {
      * State of Course
      */
     private Boolean state;
+    
+    /**
+     * State of Course
+     */
+    private Long fileId;
 
 }

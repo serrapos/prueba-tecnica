@@ -1,4 +1,4 @@
-package es.serrapos.pruebatecnica.model.exceptions;
+package es.serrapos.pruebatecnica.exceptions;
 
 public class EntityNotFoundException extends Exception {
 

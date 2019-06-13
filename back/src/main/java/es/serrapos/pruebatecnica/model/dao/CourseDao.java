@@ -1,12 +1,11 @@
-package es.serrapos.pruebatecnica.model.services;
+package es.serrapos.pruebatecnica.model.dao;
 
 import java.util.List;
-import java.util.Optional;
 
+import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
 import es.serrapos.pruebatecnica.model.entities.Course;
-import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
 
-public interface CourseService {
+public interface CourseDao {
 	
 	public Course create(Course course);
     public Course update(Long id, Course course) throws EntityNotFoundException;
@@ -14,5 +13,8 @@ public interface CourseService {
     public List<Course> findAll();
     public List<Course> findAllActive();
     public Course findOne(Long id) throws EntityNotFoundException;
+    public Course findOneByTitle(String title) throws EntityNotFoundException;
+    public boolean existsByTitle(String title);
+    public boolean existsByTitleAndDistintId(String title, Long id);
 
 }

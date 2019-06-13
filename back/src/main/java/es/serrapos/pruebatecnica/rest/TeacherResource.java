@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import es.serrapos.pruebatecnica.model.entities.Course;
+import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
+import es.serrapos.pruebatecnica.model.dao.TeacherDao;
 import es.serrapos.pruebatecnica.model.entities.Teacher;
-import es.serrapos.pruebatecnica.model.exceptions.EntityNotFoundException;
-import es.serrapos.pruebatecnica.model.services.TeacherService;
+import es.serrapos.pruebatecnica.services.CourseService;
 
 /**
 * Rest service to management of Entity 'Course'
@@ -33,15 +33,15 @@ public class TeacherResource {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
-    private TeacherService teacherService;
+    private CourseService courseService;
     
-    public TeacherResource(TeacherService teacherService) {
-        this.teacherService = teacherService;
+    public TeacherResource(CourseService courseService) {
+        this.courseService = courseService;
     }
     
     @GET
     public Response getAll() {
-        return Response.ok().entity(teacherService.findAll()).build();
+        return Response.ok().entity(courseService.findAllTeacher()).build();
     }
  
     @GET
@@ -49,10 +49,10 @@ public class TeacherResource {
 	public Response get(@PathParam("id") Long id) {
 		Teacher teacher = null;
 		try {
-			teacher = teacherService.findOne(id);
+			teacher = courseService.findOneTeacher(id);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
-			return Response.status(404).build();
+			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 		return Response.ok().entity(teacher).build();
     }
@@ -60,9 +60,9 @@ public class TeacherResource {
     @POST
 	public Response create(Teacher teacher) {
 		if(teacher.getFirstName() == null || teacher.getLastName() == null) {
-			return Response.status(500).entity("Validation error: Failure to fill in required fields").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Validation error: Failure to fill in required fields").build();
 		}
-		return Response.ok().entity(teacherService.create(teacher)).build();
+		return Response.ok().entity(courseService.createTeacher(teacher)).build();
     }
     
     @PUT
@@ -71,12 +71,12 @@ public class TeacherResource {
     	Teacher teacherUpdated = null;
     	try {
     		if(teacher.getFirstName() == null || teacher.getLastName() == null) {
-    			return Response.status(500).entity("Validation error: Failure to fill in required fields").build();
+    			return Response.status(Response.Status.BAD_REQUEST).entity("Validation error: Failure to fill in required fields").build();
     		}
-    		teacherUpdated = teacherService.update(id, teacher);
+    		teacherUpdated = courseService.updateTeacher(id, teacher);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
-			return Response.status(404).build();
+			return Response.status(Response.Status.NOT_FOUND).build();
 		}
 		return Response.ok().entity(teacherUpdated).build();
     }
@@ -85,10 +85,10 @@ public class TeacherResource {
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
     	try {
-    		teacherService.delete(id);
+    		courseService.deleteTeacher(id);
 		} catch (EntityNotFoundException e) {
 			log.error(e.getMessage());
-			return Response.status(404).build();
+			return Response.status(Response.Status.NOT_FOUND).build();
 		}
         return Response.ok().entity("Teacher deleted").build();
     }
