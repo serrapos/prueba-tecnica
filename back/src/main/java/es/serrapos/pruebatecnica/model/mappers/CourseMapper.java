@@ -34,16 +34,16 @@ public interface CourseMapper {
     @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="ID")
     public int insert(Course course);
  
-    @Update("UPDATE COURSES SET TITLE = #{title}, LEVEL = #{level}, HOURS = #{numberOfHours}, TEACHER_ID = #{teacher.id}, STATE = #{state} WHERE ID=#{id}")
+    @Update("UPDATE COURSES SET TITLE = #{title}, LEVEL = #{level}, HOURS = #{numberOfHours}, TEACHER_ID = #{teacher.id}, STATE = #{state}, FILE_ID = #{fileId} WHERE ID=#{id}")
     public int update(Course course);
     
-    @Update("UPDATE COURSES SET FILES_ID = #{idFile} WHERE ID=#{id}")
+    @Update("UPDATE COURSES SET FILE_ID = #{idFile} WHERE ID=#{id}")
     public int updateFile(Long id, Long idFile);
  
     @Delete("DELETE FROM COURSES WHERE ID=#{id}")
     public int deleteById(Long id);
  
-    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID FROM COURSES c")
+    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID, c.FILE_ID FROM COURSES c")
     @Results(value = {
                 @Result(property = "id", column = "ID"),
                 @Result(property = "title", column = "TITLE"),
@@ -55,7 +55,7 @@ public interface CourseMapper {
             })
     public List<Course> getAll();
     
-    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID FROM COURSES c WHERE c.STATE = true ORDER BY c.TITLE asc")
+    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID, c.FILE_ID FROM COURSES c WHERE c.STATE = true ORDER BY c.TITLE asc")
     @Results(value = {
                 @Result(property = "id", column = "ID"),
                 @Result(property = "title", column = "TITLE"),
@@ -67,7 +67,7 @@ public interface CourseMapper {
             })
     public List<Course> getAllActive();
  
-    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID FROM COURSES c WHERE c.ID = #{id}")
+    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID, c.FILE_ID FROM COURSES c WHERE c.ID = #{id}")
     @Results(value = {
                 @Result(property = "id", column = "ID"),
                 @Result(property = "title", column = "TITLE"),
@@ -79,7 +79,7 @@ public interface CourseMapper {
             })
     public Course getById(@Param("id") Long id);
     
-    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID FROM COURSES c WHERE c.TITLE = #{title}")
+    @Select("SELECT c.ID, c.TITLE, c.LEVEL, c.HOURS, c.STATE, c.TEACHER_ID, c.FILE_ID FROM COURSES c WHERE c.TITLE = #{title}")
     @Results(value = {
                 @Result(property = "id", column = "ID"),
                 @Result(property = "title", column = "TITLE"),

@@ -35,6 +35,7 @@ public class MyBatisCourseDaoImpl implements CourseDao{
         courseBD.setNumberOfHours(course.getNumberOfHours());
         courseBD.setTeacher(course.getTeacher());
         courseBD.setState(course.getState());
+        courseBD.setFileId(course.getFileId());
  
         this.courseMapper.update(courseBD);
         return courseBD;

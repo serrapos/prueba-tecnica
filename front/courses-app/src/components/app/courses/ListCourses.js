@@ -12,6 +12,7 @@ export class ListCourses extends React.Component {
             courses: []
         };
         this.teacherTemplate = this.teacherTemplate.bind(this);
+        this.fileTemplate = this.fileTemplate.bind(this);
     }
     
     componentDidMount() {
@@ -26,6 +27,14 @@ export class ListCourses extends React.Component {
         return rowData.teacher.lastName + ", " + rowData.teacher.firstName;
     }
 
+    fileTemplate(rowData, column) {
+        if(rowData.fileId){
+            const url = "http://localhost:8080/api/v1/filetopics/"+rowData.fileId
+            return <a href={url} target="_blank" download>Descargar</a>
+        } 
+        return "No hay fichero adjunto";
+    }
+
     render() {
        return (
         <div>
@@ -36,6 +45,7 @@ export class ListCourses extends React.Component {
                 <Column field="teacher" body={this.teacherTemplate}  header="Profesor" sortable={true} sortField="teacher.lastName"/>
                 <Column field="level" header="Nivel" sortable={true} />
                 <Column field="numberOfHours" header="Horas" sortable={true}/>
+                <Column field="fileId" header="Temario" body={this.fileTemplate}/>
             </DataTable>
         </div>
        );

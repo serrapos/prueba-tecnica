@@ -9,6 +9,8 @@ public class FileTopic {
 	
 	private String filename;
 	
+	private String mediatype;
+	
 	private byte[] content;
 
 }
