@@ -50,7 +50,7 @@ public class MyBatisCourseDaoImpl implements CourseDao{
     }
  
     @Override
-    public List findAll() {
+	public List<Course> findAll() {
         return this.courseMapper.getAll();
     }
  

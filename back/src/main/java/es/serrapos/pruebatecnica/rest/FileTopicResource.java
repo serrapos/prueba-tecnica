@@ -83,8 +83,14 @@ public class FileTopicResource {
 		@FormDataParam("file") final FormDataBodyPart body) {
     	
     	FileTopic file = new FileTopic();
-    	file.setFilename(fileDetail.getFileName());
-    	file.setMediatype(body.getMediaType().toString());
+		if (fileDetail != null && fileDetail.getFileName() != null) {
+			file.setFilename(fileDetail.getFileName());
+		} else {
+			file.setFilename("temario-curso.txt");
+		}
+		if (body != null && body.getMediaType() != null) {
+			file.setMediatype(body.getMediaType().toString());
+		}
     	
     	// Pass inputstream to byte[] 
     	ByteArrayOutputStream bos = new ByteArrayOutputStream();

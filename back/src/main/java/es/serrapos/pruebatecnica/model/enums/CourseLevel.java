@@ -1,7 +1,5 @@
 package es.serrapos.pruebatecnica.model.enums;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public enum CourseLevel {
 	BASICO("Básico"), INTERMEDIO("Intermedio"), AVANZADO("Avanzado");
 	

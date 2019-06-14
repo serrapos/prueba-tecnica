@@ -74,7 +74,7 @@ public interface CourseMapper {
                 @Result(property = "level", column = "LEVEL"),
                 @Result(property = "numberOfHours", column = "HOURS"),
                 @Result(property = "state", column = "STATE"),
-                @Result(property="teacher", column="ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+			@Result(property = "teacher", column = "TEACHER_ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
                 @Result(property="fileId", column="FILE_ID")
             })
     public Course getById(@Param("id") Long id);
@@ -86,7 +86,7 @@ public interface CourseMapper {
                 @Result(property = "level", column = "LEVEL"),
                 @Result(property = "numberOfHours", column = "HOURS"),
                 @Result(property = "state", column = "STATE"),
-                @Result(property="teacher", column="ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
+			@Result(property = "teacher", column = "TEACHER_ID", one = @One(select = "es.serrapos.pruebatecnica.model.mappers.TeacherMapper.getById")),
                 @Result(property="fileId", column="FILE_ID")
             })
     public Course getByTitle(@Param("title") String title);

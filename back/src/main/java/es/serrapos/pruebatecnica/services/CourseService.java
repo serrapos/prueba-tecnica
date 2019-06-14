@@ -31,6 +31,7 @@ public class CourseService {
     
     /*COURSES*/
     public CourseService(CourseDao courseDao, TeacherDao teacherDao, FileTopicDao fileTopicDao) {
+		log.debug("CourseService Constructor");
         this.courseDao = courseDao;
         this.teacherDao = teacherDao;
         this.fileTopicDao = fileTopicDao;
@@ -46,7 +47,7 @@ public class CourseService {
  
     public Course updateCourse(Long id, Course course) throws EntityNotFoundException, CoursesDuplicatedExceptions {
     	//Validation title not duplicate
-    	if(this.courseDao.existsByTitleAndDistintId(course.getTitle(), course.getId())) {
+		if (this.courseDao.existsByTitleAndDistintId(course.getTitle(), id)) {
     		throw new CoursesDuplicatedExceptions();
     	}
         return this.courseDao.update(id, course);

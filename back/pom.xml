@@ -16,7 +16,7 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>9</java.version>
 	</properties>
 
 	<dependencies>
@@ -78,6 +78,12 @@
 		    <artifactId>jaxb-core</artifactId>
 		    <version>2.2.11</version>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-jetty</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>

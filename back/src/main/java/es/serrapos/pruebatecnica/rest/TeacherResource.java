@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import es.serrapos.pruebatecnica.exceptions.EntityNotFoundException;
-import es.serrapos.pruebatecnica.model.dao.TeacherDao;
 import es.serrapos.pruebatecnica.model.entities.Teacher;
 import es.serrapos.pruebatecnica.services.CourseService;
 

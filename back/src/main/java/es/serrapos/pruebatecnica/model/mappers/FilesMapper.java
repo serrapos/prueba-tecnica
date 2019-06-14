@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.type.JdbcType;
 
-import es.serrapos.pruebatecnica.model.entities.Course;
 import es.serrapos.pruebatecnica.model.entities.FileTopic;
 
 @Mapper
