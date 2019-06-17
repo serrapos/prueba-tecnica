@@ -2,7 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { NavLink } from "react-router-dom";
 import {FileUpload} from 'primereact/fileupload';
-import { file } from '@babel/types';
 
 export class AddCourses extends React.Component {
 
@@ -33,7 +32,7 @@ export class AddCourses extends React.Component {
             fileId: this.state.fileId
         };
 
-        if(newCourse.title && newCourse.level  && newCourse.numberOfHours  && newCourse.teacher && newCourse.teacher.id && newCourse.state) {
+        if(newCourse.title && newCourse.level  && newCourse.numberOfHours  && newCourse.teacher && newCourse.teacher.id) {
             this.setState({ messageOk: false, messageError: false });
 
             axios.post(`http://localhost:8080/api/v1/course`, newCourse)
