@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +25,14 @@ import es.serrapos.pruebatecnica.model.entities.Teacher;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TeacherResourceTests {
 
-	static final String ENDPOINT_COURSES = "/api/v1/teacher";
+	static final String ENDPOINT_TEACHER = "/api/v1/teacher";
 
 	@Autowired
 	private TestRestTemplate restTemplate;
 
 	@Test
 	public void testOptions() {
-		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.OPTIONS, null,
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_TEACHER, HttpMethod.OPTIONS, null,
 				new ParameterizedTypeReference<String>() {
 				});
 		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
@@ -40,7 +41,7 @@ public class TeacherResourceTests {
 
 	@Test
 	public void testGetAll() {
-		ResponseEntity<List<Teacher>> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.GET, null,
+		ResponseEntity<List<Teacher>> response = restTemplate.exchange(ENDPOINT_TEACHER, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Teacher>>() {
 				});
 		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
@@ -50,12 +51,57 @@ public class TeacherResourceTests {
 
 	@Test
 	public void testGet() {
-		ResponseEntity<Teacher> response = restTemplate.exchange(ENDPOINT_COURSES + "/1", HttpMethod.GET, null,
+		ResponseEntity<Teacher> response = restTemplate.exchange(ENDPOINT_TEACHER + "/1", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Teacher>() {
 				});
 		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
 		assertNotNull(response.getBody());
 		assertEquals(response.getBody().getId(), Long.valueOf(1));
+	}
+
+	@Test
+	public void testCreate() {
+		HttpEntity<Teacher> entity = new HttpEntity<>(mockTeacher());
+		ResponseEntity<Teacher> response = restTemplate.exchange(ENDPOINT_TEACHER, HttpMethod.POST, entity,
+				Teacher.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
+		assertNotNull(response.getBody());
+		assertNotNull(response.getBody().getId());
+	}
+
+	@Test
+	public void testUpdate() {
+		HttpEntity<Teacher> entity = new HttpEntity<>(mockTeacher());
+		entity.getBody().setFirstName("Teacher UPDATED");
+		ResponseEntity<Teacher> response = restTemplate.exchange(ENDPOINT_TEACHER + "/1", HttpMethod.PUT, entity,
+				Teacher.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
+		assertNotNull(response.getBody());
+		assertEquals("Teacher UPDATED", response.getBody().getFirstName());
+	}
+
+	@Test
+	public void testDelete() {
+
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_TEACHER + "/4", HttpMethod.DELETE, null,
+				new ParameterizedTypeReference<String>() {
+				});
+
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
+		assertNotNull(response.getBody());
+		assertEquals("Teacher deleted", response.getBody());
+
+		ResponseEntity<Teacher> responseGet = restTemplate.exchange(ENDPOINT_TEACHER + "/4", HttpMethod.GET, null,
+				new ParameterizedTypeReference<Teacher>() {
+				});
+		assertTrue(responseGet.getStatusCode().equals(HttpStatus.NOT_FOUND));
+	}
+
+	private Teacher mockTeacher() {
+		Teacher teacher = new Teacher();
+		teacher.setFirstName("Nombre");
+		teacher.setLastName("Apellidos");
+		return teacher;
 	}
 
 }

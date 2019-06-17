@@ -80,6 +80,42 @@ public class CourseResourceTests {
 	}
 
 	@Test
+	public void testCreateWithErrorTitle() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setTitle(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.POST, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testCreateWithErrorTeacher() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setTeacher(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.POST, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testCreateWithErrorLevel() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setLevel(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.POST, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testCreateWithErrorState() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setState(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.POST, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
 	public void testCreateDuplicated() {
 		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
 		entity.getBody().setTitle("Course Duplicated");
@@ -120,6 +156,15 @@ public class CourseResourceTests {
 	}
 
 	@Test
+	public void testDeleteNotFound() {
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/1000", HttpMethod.DELETE, null,
+				new ParameterizedTypeReference<String>() {
+				});
+
+		assertTrue(response.getStatusCode().equals(HttpStatus.NOT_FOUND));
+	}
+
+	@Test
 	public void testUpdate() {
 		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
 		entity.getBody().setTitle("Course UPDATED");
@@ -133,6 +178,59 @@ public class CourseResourceTests {
 		assertEquals("Course UPDATED", response.getBody().getTitle());
 		assertEquals(Long.valueOf(1), response.getBody().getTeacher().getId());
 		assertEquals(null, response.getBody().getFileId());
+	}
+
+	@Test
+	public void testUpdateNotFound() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setTitle("Course UPDATED");
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/2000", HttpMethod.PUT, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.NOT_FOUND));
+	}
+
+	@Test
+	public void testUpdateErrorTitle() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setTitle(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/2", HttpMethod.PUT, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testUpdateErrorLevel() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setLevel(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/2", HttpMethod.PUT, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testUpdateErrorState() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setState(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/2", HttpMethod.PUT, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testUpdateErrorTeacher() {
+		HttpEntity<Course> entity = new HttpEntity<>(mockCourse());
+		entity.getBody().setTeacher(null);
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES + "/2", HttpMethod.PUT, entity,
+				String.class);
+		assertTrue(response.getStatusCode().equals(HttpStatus.BAD_REQUEST));
+	}
+
+	@Test
+	public void testOption() {
+		ResponseEntity<String> response = restTemplate.exchange(ENDPOINT_COURSES, HttpMethod.OPTIONS, null,
+				new ParameterizedTypeReference<String>() {
+				});
+		assertTrue(response.getStatusCode().equals(HttpStatus.OK));
 	}
 
 	private Course mockCourse() {

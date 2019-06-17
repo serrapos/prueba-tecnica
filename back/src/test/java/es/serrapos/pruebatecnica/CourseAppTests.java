@@ -157,9 +157,6 @@ public class CourseAppTests {
 				});
 		assertTrue(responseGetActives.getStatusCode().equals(HttpStatus.OK));
 		assertNotNull(responseGetActives.getBody());
-//		for (Course c : responseGetActives.getBody().listIterator()) {
-//			assertEquals(true, c.getState());
-//		}
 
 		// Borramos curso
 		ResponseEntity<String> responseDeleteCourse = restTemplate.exchange(
